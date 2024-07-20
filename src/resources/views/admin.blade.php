@@ -65,9 +65,10 @@
             <button type="submit">検索</button>
         </form>
         <form action="/admin" method="get">
+            @csrf
             <button type="submit">リセット</button>
+            <button type="button">エクスポート</button>
         </form>
-        <button type="button">エクスポート</button>
         {{ $contacts->appends(request()->query())->links() }}
         <table>
             <tr>
@@ -78,16 +79,19 @@
                 <th></th>
             </tr>
             @foreach ($contacts as $contact)
-                <tr>
-                    <td>{{ $contact->last_name . "　" . $contact->first_name }}</td>
-                    <td>{{ $contact->gender }}</td>
-                    <td>{{ $contact->email }}</td>
-                    <td>{{ $contact->category->content }}</td>
-                    <td>
-                        <input type="hidden" name="" value="{{ $contact }}"></input>
-                        <button type="button">詳細</button>
-                    </td>
-                </tr>
+                <form action="/modal" method="post">
+                    @csrf
+                    <tr>
+                        <td>{{ $contact->last_name . "　" . $contact->first_name }}</td>
+                        <td>{{ $contact->gender }}</td>
+                        <td>{{ $contact->email }}</td>
+                        <td>{{ $contact->category->content }}</td>
+                        <td>
+                            <input type="hidden" name="id" value="{{ $contact->id }}"></input>
+                            <button type="submit">詳細</button>
+                        </td>
+                    </tr>
+                </form>
             @endforeach
         </table>
     </main>
